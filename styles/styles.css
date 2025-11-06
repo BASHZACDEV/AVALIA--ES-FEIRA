@@ -326,3 +326,34 @@ form {
     user-select: none;
     -webkit-user-select: none;
 } 
+
+/* Estilo para o campo de voto de Melhor Cosplay */
+#melhorCosplay {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    background-color: var(--input-background);
+    border-radius: 5px;
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+#melhorCosplay:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.15);
+}
+#melhorCosplay:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+#melhorCosplay option {
+    background-color: var(--card-background);
+    color: var(--text-color);
+}
+#melhorCosplayOutroGroup {
+    transition: all 0.2s ease;
+}
+#melhorCosplayOutroGroup input {
+    margin-top: 0.4rem;
+}

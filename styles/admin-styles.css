@@ -324,3 +324,28 @@ h1 {
     width: 16px;
     height: 16px;
 } 
+
+/* Badge para Melhor Cosplay */
+.melhor-cosplay {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.6rem;
+    background-color: rgba(33, 150, 243, 0.15);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    line-height: 1.2;
+}
+.melhor-cosplay::before {
+    content: "\uD83C\uDFC6";
+    font-size: 0.95rem;
+}
+.melhor-cosplay:empty {
+    display: none;
+}
+.melhor-cosplay:not(:empty) {
+    border-color: var(--primary-color);
+    background-color: rgba(33, 150, 243, 0.25);
+}

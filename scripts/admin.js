@@ -66,6 +66,31 @@ class AvaliacoesManager {
         document.querySelector('.stat-card:nth-child(2) .stat-number').textContent = stats.total;
         document.querySelector('.stat-card:nth-child(3) .stat-number').textContent = stats.mediaCriatividade;
         document.querySelector('.stat-card:nth-child(4) .stat-number').textContent = stats.mediaProjetos;
+
+        // Cosplay mais votado
+        const contagem = {};
+        this.avaliacoes.forEach(av => {
+            const nome = (av.melhorCosplay || '').trim();
+            if (!nome) return;
+            contagem[nome] = (contagem[nome] || 0) + 1;
+        });
+
+        let max = 0;
+        let vencedores = [];
+        Object.entries(contagem).forEach(([nome, count]) => {
+            if (count > max) {
+                max = count;
+                vencedores = [nome];
+            } else if (count === max && max > 0) {
+                vencedores.push(nome);
+            }
+        });
+
+        const texto = max > 0 ? vencedores.join(', ') : 'Sem votos';
+        const elemento = document.querySelector('.winner-text');
+        if (elemento) {
+            elemento.textContent = texto;
+        }
     }
 
     criarEstrelas(nota) {
@@ -90,7 +115,7 @@ class AvaliacoesManager {
         const template = document.getElementById('avaliacao-template');
         const container = document.querySelector('.avaliacoes-list');
         container.innerHTML = '';
-
+    
         avaliacoesArray.forEach(avaliacao => {
             const clone = template.content.cloneNode(true);
             
@@ -101,6 +126,11 @@ class AvaliacoesManager {
             notasItems[0].textContent = this.criarEstrelas(Number(avaliacao.criatividade));
             notasItems[1].textContent = this.criarEstrelas(Number(avaliacao.projetos));
             notasItems[2].textContent = this.criarEstrelas(Number(avaliacao.interatividade));
+            // valor do melhor cosplay
+            const melhorCosplayEl = clone.querySelector('.melhor-cosplay');
+            if (melhorCosplayEl) {
+                melhorCosplayEl.textContent = avaliacao.melhorCosplay || '';
+            }
             
             clone.querySelector('.comentario').textContent = avaliacao.comentarios || '';
             
@@ -111,8 +141,9 @@ class AvaliacoesManager {
     filtrarAvaliacoes(termo) {
         termo = termo.toLowerCase();
         const filtradas = this.avaliacoes.filter(av => 
-            av.nome.toLowerCase().includes(termo) || 
-            av.comentarios.toLowerCase().includes(termo)
+            (av.nome || '').toLowerCase().includes(termo) || 
+            (av.comentarios || '').toLowerCase().includes(termo) ||
+            (av.melhorCosplay || '').toLowerCase().includes(termo)
         );
         this.renderizarAvaliacoes(filtradas);
     }
@@ -209,7 +240,7 @@ async function exportarCSV() {
         });
 
         // Cria o cabeçalho do CSV
-        let csv = 'Nome,Data,Criatividade,Projetos,Interatividade,Comentários\n';
+        let csv = 'Nome,Data,Criatividade,Projetos,Interatividade,Melhor Cosplay,Comentários\n';
         
         // Adiciona cada avaliação ao CSV
         avaliacoes.forEach(av => {
@@ -219,7 +250,8 @@ async function exportarCSV() {
                 av.criatividade,
                 av.projetos,
                 av.interatividade,
-                `"${(av.comentarios || '').replace(/"/g, '""')}"` // Escapa aspas duplas nos comentários
+                `"${(av.melhorCosplay || '').replace(/"/g, '""')}"`,
+                `"${(av.comentarios || '').replace(/"/g, '""')}"`
             ].join(',');
             
             csv += linha + '\n';
@@ -239,4 +271,4 @@ async function exportarCSV() {
         console.error('Erro ao exportar:', error);
         alert('Erro ao exportar avaliações: ' + error.message);
     }
-} 
+}

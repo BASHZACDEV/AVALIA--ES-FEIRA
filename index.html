@@ -92,6 +92,22 @@
             </div>
 
             <div class="input-group">
+                <label for="melhorCosplay">Vote no melhor cosplay</label>
+                <select id="melhorCosplay" name="melhorCosplay">
+                    <option value="">Selecione uma opção</option>
+                    <option value="Cosplay A">Anakin</option>
+                    <option value="Cosplay B">Medico da Peste</option>
+                    <option value="Cosplay C">Katana</option>
+                    <option value="Cosplay D">Ninja</option>
+                </select>
+            </div>
+
+            <div class="input-group" id="melhorCosplayOutroGroup" style="display:none;">
+                <label for="melhorCosplayOutro">Outro (especifique)</label>
+                <input type="text" id="melhorCosplayOutro" name="melhorCosplayOutro" placeholder="Digite o nome do cosplay">
+            </div>
+
+            <div class="input-group">
                 <label for="comentarios">Sua mensagem</label>
                 <textarea id="comentarios" name="comentarios" rows="4" 
                     placeholder="Conte-nos o que achou e como podemos melhorar"></textarea>

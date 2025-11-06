@@ -12,11 +12,18 @@ document.getElementById('avaliacaoForm').addEventListener('submit', function(e) 
             return;
         }
 
+        // Coleta e compõe o valor do \"Melhor Cosplay\"
+        const selectMelhorCosplay = document.getElementById('melhorCosplay');
+        const melhorCosplayValor = (selectMelhorCosplay && selectMelhorCosplay.value === 'Outro')
+            ? (document.getElementById('melhorCosplayOutro').value || '').trim()
+            : (selectMelhorCosplay ? selectMelhorCosplay.value : '');
+
         const avaliacao = {
             nome: document.getElementById('nome').value || 'Anônimo',
             criatividade: Number(criatividade.value),
             projetos: Number(projetos.value),
             interatividade: Number(interatividade.value),
+            melhorCosplay: melhorCosplayValor || '',
             comentarios: document.getElementById('comentarios').value,
             data: new Date().toISOString()
         };
@@ -78,5 +85,27 @@ function initializeStarRatings() {
     });
 }
 
-// Inicializa o sistema de rating quando o documento carregar
-document.addEventListener('DOMContentLoaded', initializeStarRatings); 
+// Inicializa o sistema de rating e a lógica de \"Melhor Cosplay\" quando o documento carregar
+function initializeMelhorCosplay() {
+    const select = document.getElementById('melhorCosplay');
+    const outroGroup = document.getElementById('melhorCosplayOutroGroup');
+    const outroInput = document.getElementById('melhorCosplayOutro');
+    if (!select || !outroGroup) return;
+
+    const toggle = () => {
+        const isOutro = select.value === 'Outro';
+        outroGroup.style.display = isOutro ? 'block' : 'none';
+        if (outroInput) {
+            outroInput.required = isOutro;
+            if (!isOutro) outroInput.value = '';
+        }
+    };
+
+    select.addEventListener('change', toggle);
+    toggle();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeStarRatings();
+    initializeMelhorCosplay();
+});
